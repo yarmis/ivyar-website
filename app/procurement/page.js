@@ -1,3 +1,16 @@
+Це **не код** — це мої інструкції, які не повинні бути в файлі.
+
+---
+
+## 📋 Виправляємо:
+
+**Крок 1:** Відкрийте:
+👉 **https://github.com/yarmis/ivyar-website/edit/main/app/procurement/page.js**
+
+**Крок 2:** Натисніть **Ctrl+A** → **Delete** (видалити ВСЕ)
+
+**Крок 3:** Скопіюйте **ТІЛЬКИ** цей код (без нічого зайвого):
+```js
 "use client";
 import { useState, useEffect, useRef } from 'react';
 
@@ -77,7 +90,7 @@ export default function Procurement() {
           <div style={{ background: '#1e293b', borderRadius: '10px', padding: '0.75rem', marginBottom: '0.5rem', borderLeft: '3px solid #3b82f6' }}>
             <div style={{ color: '#94a3b8', fontSize: '0.7rem' }}>{t.found}:</div>
             <div style={{ fontWeight: '600' }}>{lang === 'ua' ? product.nameUa : product.name}</div>
-            <div style={{ color: '#64748b', fontSize: '0.75rem' }}>NSN: {product.nsn} • {qty} шт</div>
+            <div style={{ color: '#64748b', fontSize: '0.75rem' }}>NSN: {product.nsn} - {qty} шт</div>
           </div>
           <div style={{ background: '#12121a', borderRadius: '8px', padding: '0.5rem', marginBottom: '0.5rem', border: '1px solid #1e293b' }}>
             {suppliers.slice(0, 3).map((s, j) => (
@@ -181,16 +194,8 @@ function Hdr({ t, g }) {
 }
 ```
 
----
-
-## 📋 Крок 4: Натисніть зелену кнопку
-
-**"Commit changes"** → **"Commit changes"**
+**Крок 4:** Натисніть **"Commit changes"** → **"Commit changes"**
 
 ---
 
-## 📋 Крок 5: Перевірте що збереглось
-
-Після commit відкрийте:
-```
-https://github.com/yarmis/ivyar-website/blob/main/app/procurement/page.js
+**Напишіть "готово" після commit!** 👇
