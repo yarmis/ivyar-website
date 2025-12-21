@@ -193,4 +193,129 @@ export default function Procurement() {
               <span>${calc.goodsPrice.toFixed(0)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.3rem' }}>
-              <span style={{
+              <span style={{ color: '#94a3b8' }}>{t.broker}:</span>
+              <span>${calc.brokerFee.toFixed(0)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.3rem' }}>
+              <span style={{ color: '#94a3b8' }}>{t.logistics} ({calc.logName}):</span>
+              <span>${calc.logCost.toFixed(0)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.3rem' }}>
+              <span style={{ color: '#94a3b8' }}>{t.logMargin}:</span>
+              <span>${calc.logMargin.toFixed(0)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.3rem' }}>
+              <span style={{ color: '#f59e0b' }}>🛡️ {t.insurance}:</span>
+              <span style={{ color: '#f59e0b' }}>${calc.insurance.toFixed(0)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.5rem' }}>
+              <span style={{ color: '#94a3b8' }}>{t.bank}:</span>
+              <span>${calc.bank.toFixed(0)}</span>
+            </div>
+            
+            <div style={{ borderTop: '1px solid #3b82f6', paddingTop: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>{t.total}:</span>
+              <span style={{ fontWeight: '700', fontSize: '1.2rem', color: '#22c55e' }}>${calc.total.toFixed(0)}</span>
+            </div>
+            
+            <div style={{ marginTop: '0.5rem', padding: '0.4rem', background: '#f59e0b15', borderRadius: '4px', fontSize: '0.65rem', color: '#f59e0b' }}>
+              {t.insNote}
+            </div>
+          </div>
+        </div>
+      );
+    }
+    if (m.type === 'order') {
+      return (
+        <div key={i} style={{ marginBottom: '1rem' }}>
+          <Hdr t={t} g />
+          <div style={{ background: '#22c55e15', border: '1px solid #22c55e40', borderRadius: '10px', padding: '1rem', textAlign: 'center' }}>
+            <div style={{ fontSize: '1.5rem' }}>✅</div>
+            <div style={{ fontWeight: '600', color: '#22c55e' }}>{t.created}</div>
+            <div style={{ background: '#0a0a0f', padding: '0.5rem 0.8rem', borderRadius: '6px', display: 'inline-block', marginTop: '0.5rem' }}>
+              <div style={{ color: '#64748b', fontSize: '0.65rem' }}>{t.num}:</div>
+              <div style={{ fontFamily: 'monospace', color: '#3b82f6', fontWeight: '700', fontSize: '1.1rem' }}>{m.num}</div>
+            </div>
+            <div style={{ background: '#1e293b', borderRadius: '6px', padding: '0.5rem', marginTop: '0.75rem', textAlign: 'left' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.2rem' }}>
+                <span style={{ color: '#94a3b8' }}>{t.goods}:</span><span>${m.calc.goodsPrice.toFixed(0)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.2rem' }}>
+                <span style={{ color: '#94a3b8' }}>{t.broker}:</span><span>${m.calc.brokerFee.toFixed(0)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.2rem' }}>
+                <span style={{ color: '#94a3b8' }}>{t.logistics}:</span><span>${m.calc.logCost.toFixed(0)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.2rem' }}>
+                <span style={{ color: '#f59e0b' }}>🛡️ {t.insurance}:</span><span style={{ color: '#f59e0b' }}>${m.calc.insurance.toFixed(0)}</span>
+              </div>
+              <div style={{ borderTop: '1px solid #334155', paddingTop: '0.3rem', marginTop: '0.3rem', display: 'flex', justifyContent: 'space-between', fontWeight: '700' }}>
+                <span>{t.total}:</span><span style={{ color: '#22c55e' }}>${m.calc.total.toFixed(0)}</span>
+              </div>
+            </div>
+            <div style={{ marginTop: '0.5rem', fontSize: '0.7rem', color: '#f59e0b' }}>{t.note}</div>
+            <button onClick={restart} style={{ marginTop: '0.75rem', background: '#3b82f6', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}>{t.restart}</button>
+          </div>
+        </div>
+      );
+    }
+    const isU = m.role === 'user';
+    return (
+      <div key={i} style={{ marginBottom: '0.5rem', display: 'flex', flexDirection: 'column', alignItems: isU ? 'flex-end' : 'flex-start' }}>
+        {!isU && <Hdr t={t} />}
+        <div style={{ background: isU ? '#3b82f6' : '#1e293b', padding: '0.5rem 0.75rem', borderRadius: isU ? '10px 10px 2px 10px' : '10px 10px 10px 2px', maxWidth: '85%', fontSize: '0.85rem' }}>{m.text}</div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#0a0a0f', color: '#fff', fontFamily: 'system-ui', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, #005bbb 50%, #ffd500 50%)' }} />
+      <header style={{ background: '#12121a', padding: '0.6rem 1rem', borderBottom: '1px solid #1e293b' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '34px', height: '34px', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.8rem' }}>IV</div>
+            <div><div style={{ fontWeight: '700', fontSize: '0.9rem' }}>{t.title}</div><div style={{ color: '#64748b', fontSize: '0.65rem' }}>{t.subtitle}</div></div>
+          </div>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            <a href="/" style={{ color: '#94a3b8', textDecoration: 'none', padding: '5px 8px', fontSize: '0.8rem' }}>{t.home}</a>
+            <button onClick={() => setLang(lang === 'ua' ? 'en' : 'ua')} style={{ background: '#f59e0b', color: '#000', border: 'none', padding: '5px 10px', borderRadius: '5px', cursor: 'pointer', fontWeight: '700', fontSize: '0.75rem' }}>{lang === 'ua' ? 'EN' : 'UA'}</button>
+          </div>
+        </div>
+      </header>
+      <div style={{ flex: 1, maxWidth: '600px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem' }}>
+          {msgs.map((m, i) => renderMsg(m, i))}
+          {typing && <div style={{ marginBottom: '0.5rem' }}><Hdr t={t} /><div style={{ background: '#1e293b', padding: '0.5rem 0.75rem', borderRadius: '10px', display: 'inline-block' }}><span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>{t.thinking}</span></div></div>}
+          {showUrg && (
+            <div style={{ background: '#12121a', borderRadius: '8px', padding: '0.6rem', border: '1px solid #1e293b', marginBottom: '0.5rem' }}>
+              <div style={{ marginBottom: '0.4rem', fontWeight: '500', fontSize: '0.85rem' }}>{t.urgQ}</div>
+              {[[t.crit, 'critical'], [t.urg, 'urgent'], [t.std, 'standard'], [t.plan, 'planned']].map(([v, k], j) => <button key={j} onClick={() => selUrg(k)} style={{ display: 'block', width: '100%', background: '#1e293b', border: '1px solid #334155', padding: '0.5rem', borderRadius: '5px', color: '#fff', cursor: 'pointer', textAlign: 'left', marginBottom: '0.3rem', fontSize: '0.8rem' }}>{v}</button>)}
+              <button onClick={cancelOrder} style={{ display: 'block', width: '100%', background: '#dc262615', border: '1px solid #dc262640', padding: '0.5rem', borderRadius: '5px', color: '#dc2626', cursor: 'pointer', textAlign: 'center', marginTop: '0.5rem', fontSize: '0.8rem' }}>{t.cancel}</button>
+            </div>
+          )}
+          <div ref={ref} />
+        </div>
+        {msgs.length <= 1 && (
+          <div style={{ padding: '0 0.75rem 0.5rem' }}>
+            <div style={{ color: '#64748b', fontSize: '0.7rem', marginBottom: '0.3rem' }}>{t.ex}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+              {[t.ex1, t.ex2, t.ex3].map((e, i) => <button key={i} onClick={() => setInput(e)} style={{ background: '#1e293b', border: '1px solid #334155', padding: '0.3rem 0.6rem', borderRadius: '12px', color: '#94a3b8', cursor: 'pointer', fontSize: '0.75rem' }}>{e}</button>)}
+            </div>
+          </div>
+        )}
+        <div style={{ padding: '0.6rem', borderTop: '1px solid #1e293b', background: '#12121a' }}>
+          <div style={{ display: 'flex', gap: '0.4rem' }}>
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && send()} placeholder={t.placeholder} style={{ flex: 1, background: '#0a0a0f', border: '1px solid #334155', borderRadius: '8px', padding: '0.6rem 0.8rem', color: '#fff', fontSize: '0.9rem', outline: 'none' }} />
+            <button onClick={send} disabled={typing || !input.trim()} style={{ background: typing || !input.trim() ? '#334155' : '#3b82f6', color: '#fff', border: 'none', padding: '0 1rem', borderRadius: '8px', cursor: typing || !input.trim() ? 'not-allowed' : 'pointer', fontWeight: '600', fontSize: '1rem' }}>{t.send}</button>
+          </div>
+        </div>
+      </div>
+      <footer style={{ background: '#12121a', borderTop: '1px solid #1e293b', padding: '0.5rem', textAlign: 'center', color: '#64748b', fontSize: '0.65rem' }}>© 2025 IVYAR LLC 🇺🇦</footer>
+    </div>
+  );
+}
+
+function Hdr({ t, g }) {
+  return <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '0.3rem' }}><div style={{ width: '22px', height: '22px', background: g ? 'linear-gradient(135deg,#22c55e,#16a34a)' : 'linear-gradient(135deg,#3b82f6,#8b5cf6)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem' }}>{g ? '✓' : '🤖'}</div><span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>{t.ai}</span></div>;
+}
