@@ -24,8 +24,8 @@ const LOGISTICS = [
 ];
 
 const T = {
-  ua: { title: "AI АСИСТЕНТ ЗАКУПІВЕЛЬ", subtitle: "IVYAR LLC", placeholder: "Опишіть що потрібно...", send: "➤", thinking: "Аналізую...", found: "Знайдено", rec: "✓ РЕКОМЕНДАЦІЯ", price: "Ціна", days: "днів", total: "Разом", logistics: "Логістика", urgQ: "Терміновість?", crit: "🔴 Критично", urg: "🟠 Терміново", std: "🟡 Стандартно", plan: "🟢 Планово", created: "Замовлення створено!", num: "Номер", ai: "AI", ex: "Приклади:", ex1: "Гальма M939, 20шт", ex2: "Шини FMTV", ex3: "Фільтр", noRes: "Не знайдено. Спробуйте: гальма, шини, фільтр, стартер", welcome: "Вітаю! Опишіть яке обладнання потрібно.", why: "Найкраще співвідношення ціна/час", note: "🔒 Для замовлення: Signal", home: "←" },
-  en: { title: "AI PROCUREMENT ASSISTANT", subtitle: "IVYAR LLC", placeholder: "Describe what you need...", send: "➤", thinking: "Analyzing...", found: "Found", rec: "✓ RECOMMENDED", price: "Price", days: "days", total: "Total", logistics: "Logistics", urgQ: "Urgency?", crit: "🔴 Critical", urg: "🟠 Urgent", std: "🟡 Standard", plan: "🟢 Planned", created: "Order Created!", num: "Number", ai: "AI", ex: "Examples:", ex1: "Brakes M939, 20pcs", ex2: "Tires FMTV", ex3: "Filter", noRes: "Not found. Try: brakes, tires, filter, starter", welcome: "Hello! Describe what equipment you need.", why: "Best price/time balance", note: "🔒 To order: Signal", home: "←" }
+  ua: { title: "AI АСИСТЕНТ ЗАКУПІВЕЛЬ", subtitle: "IVYAR LLC", placeholder: "Опишіть що потрібно...", send: "➤", thinking: "Аналізую...", found: "Знайдено", rec: "✓ РЕКОМЕНДАЦІЯ", price: "Ціна", days: "днів", total: "Разом", logistics: "Логістика", urgQ: "Терміновість?", crit: "🔴 Критично", urg: "🟠 Терміново", std: "🟡 Стандартно", plan: "🟢 Планово", created: "Замовлення створено!", num: "Номер", ai: "AI", ex: "Приклади:", ex1: "Гальма, 20шт", ex2: "Шини, 10шт", ex3: "Фільтр, 5шт", noRes: "Не знайдено. Спробуйте: гальма, шини, фільтр, стартер", welcome: "Вітаю! Опишіть яке обладнання потрібно.", why: "Найкраще співвідношення ціна/час", note: "🔒 Для замовлення: Signal", home: "←", cancel: "✕ Скасувати", restart: "🔄 Новий пошук" },
+  en: { title: "AI PROCUREMENT ASSISTANT", subtitle: "IVYAR LLC", placeholder: "Describe what you need...", send: "➤", thinking: "Analyzing...", found: "Found", rec: "✓ RECOMMENDED", price: "Price", days: "days", total: "Total", logistics: "Logistics", urgQ: "Urgency?", crit: "🔴 Critical", urg: "🟠 Urgent", std: "🟡 Standard", plan: "🟢 Planned", created: "Order Created!", num: "Number", ai: "AI", ex: "Examples:", ex1: "Brakes, 20pcs", ex2: "Tires, 10pcs", ex3: "Filter, 5pcs", noRes: "Not found. Try: brakes, tires, filter, starter", welcome: "Hello! Describe what equipment you need.", why: "Best price/time balance", note: "🔒 To order: Signal", home: "←", cancel: "✕ Cancel", restart: "🔄 New Search" }
 };
 
 export default function Procurement() {
@@ -41,7 +41,23 @@ export default function Procurement() {
   useEffect(() => { ref.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, typing]);
 
   const search = (q) => PRODUCTS.filter(p => p.keys.some(k => q.toLowerCase().includes(k)));
-  const getQty = (q) => { const m = q.match(/(\d+)/); return m ? parseInt(m[1]) : 10; };
+  const getQty = (q) => { 
+    const nums = q.match(/\d+/g);
+    if (!nums) return 10;
+    const filtered = nums.filter(n => parseInt(n) < 500);
+    return filtered.length > 0 ? parseInt(filtered[filtered.length - 1]) : 10;
+  };
+
+  const restart = () => {
+    setMsgs([{ role: 'ai', text: t.welcome }]);
+    setShowUrg(false);
+    setInput('');
+  };
+
+  const cancelOrder = () => {
+    setShowUrg(false);
+    setMsgs(p => [...p, { role: 'ai', text: lang === 'ua' ? '❌ Скасовано. Введіть новий запит.' : '❌ Cancelled. Enter new request.' }]);
+  };
 
   const send = async () => {
     if (!input.trim() || typing) return;
@@ -60,10 +76,10 @@ export default function Procurement() {
     setShowUrg(true);
   };
 
-  const selUrg = () => {
+  const selUrg = (level) => {
     setShowUrg(false);
     const num = 'IVYAR-' + Date.now().toString(36).toUpperCase();
-    setMsgs(p => [...p, { role: 'ai', type: 'order', num }]);
+    setMsgs(p => [...p, { role: 'ai', type: 'order', num, level }]);
   };
 
   const renderMsg = (m, i) => {
@@ -116,6 +132,7 @@ export default function Procurement() {
               <div style={{ fontFamily: 'monospace', color: '#3b82f6', fontWeight: '700' }}>{m.num}</div>
             </div>
             <div style={{ marginTop: '0.5rem', fontSize: '0.7rem', color: '#f59e0b' }}>{t.note}</div>
+            <button onClick={restart} style={{ marginTop: '0.75rem', background: '#3b82f6', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}>{t.restart}</button>
           </div>
         </div>
       );
@@ -151,7 +168,8 @@ export default function Procurement() {
           {showUrg && (
             <div style={{ background: '#12121a', borderRadius: '8px', padding: '0.6rem', border: '1px solid #1e293b', marginBottom: '0.5rem' }}>
               <div style={{ marginBottom: '0.4rem', fontWeight: '500', fontSize: '0.85rem' }}>{t.urgQ}</div>
-              {[[t.crit], [t.urg], [t.std], [t.plan]].map(([v], j) => <button key={j} onClick={selUrg} style={{ display: 'block', width: '100%', background: '#1e293b', border: '1px solid #334155', padding: '0.5rem', borderRadius: '5px', color: '#fff', cursor: 'pointer', textAlign: 'left', marginBottom: '0.3rem', fontSize: '0.8rem' }}>{v}</button>)}
+              {[[t.crit, 'critical'], [t.urg, 'urgent'], [t.std, 'standard'], [t.plan, 'planned']].map(([v, k], j) => <button key={j} onClick={() => selUrg(k)} style={{ display: 'block', width: '100%', background: '#1e293b', border: '1px solid #334155', padding: '0.5rem', borderRadius: '5px', color: '#fff', cursor: 'pointer', textAlign: 'left', marginBottom: '0.3rem', fontSize: '0.8rem' }}>{v}</button>)}
+              <button onClick={cancelOrder} style={{ display: 'block', width: '100%', background: '#dc262615', border: '1px solid #dc262640', padding: '0.5rem', borderRadius: '5px', color: '#dc2626', cursor: 'pointer', textAlign: 'center', marginTop: '0.5rem', fontSize: '0.8rem' }}>{t.cancel}</button>
             </div>
           )}
           <div ref={ref} />
