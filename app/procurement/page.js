@@ -1,16 +1,3 @@
-Це **не код** — це мої інструкції, які не повинні бути в файлі.
-
----
-
-## 📋 Виправляємо:
-
-**Крок 1:** Відкрийте:
-👉 **https://github.com/yarmis/ivyar-website/edit/main/app/procurement/page.js**
-
-**Крок 2:** Натисніть **Ctrl+A** → **Delete** (видалити ВСЕ)
-
-**Крок 3:** Скопіюйте **ТІЛЬКИ** цей код (без нічого зайвого):
-```js
 "use client";
 import { useState, useEffect, useRef } from 'react';
 
@@ -192,10 +179,3 @@ export default function Procurement() {
 function Hdr({ t, g }) {
   return <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '0.3rem' }}><div style={{ width: '22px', height: '22px', background: g ? 'linear-gradient(135deg,#22c55e,#16a34a)' : 'linear-gradient(135deg,#3b82f6,#8b5cf6)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem' }}>{g ? '✓' : '🤖'}</div><span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>{t.ai}</span></div>;
 }
-```
-
-**Крок 4:** Натисніть **"Commit changes"** → **"Commit changes"**
-
----
-
-**Напишіть "готово" після commit!** 👇
