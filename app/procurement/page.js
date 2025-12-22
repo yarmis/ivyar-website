@@ -25,14 +25,21 @@ const LOGISTICS = [
 
 const FEES = { broker: 0.12, insurance: 0.02, bank: 0.03, logisticsMargin: 0.05 };
 
+const TEAM = {
+  usa: { name: "Ігор Ярмосюк", nameEn: "Igor Yarmosiuk", role: "Власник / Брокер-координатор", roleEn: "Owner / Broker-Coordinator", location: "Seattle, WA", flag: "🇺🇸" },
+  ua: { name: "Віталій Літвіненко", nameEn: "Vitalii Litvinenko", role: "Офіційний представник в Україні", roleEn: "Official Representative in Ukraine", location: "Україна", flag: "🇺🇦" }
+};
+
 const T = {
   ua: { 
     title: "AI АСИСТЕНТ ЗАКУПІВЕЛЬ", subtitle: "IVYAR LLC", placeholder: "Опишіть що потрібно...", send: "➤", thinking: "Аналізую...", found: "Знайдено", rec: "✓ РЕКОМЕНДАЦІЯ", days: "днів", urgQ: "Терміновість?", crit: "🔴 Критично", urg: "🟠 Терміново", std: "🟡 Стандартно", plan: "🟢 Планово", created: "Замовлення створено!", num: "Номер", ai: "AI", ex: "Приклади:", ex1: "Гальма, 20шт", ex2: "Шини, 10шт", ex3: "Фільтр, 5шт", noRes: "Не знайдено. Спробуйте: гальма, шини, фільтр, стартер", welcome: "Вітаю! Опишіть яке обладнання потрібно.", note: "🔒 Для підтвердження: Signal", home: "←", cancel: "✕ Скасувати", restart: "🔄 Новий пошук",
-    cost: "РОЗРАХУНОК ВАРТОСТІ", goods: "Товар", broker: "Комісія IVYAR (12%)", logistics: "Логістика", logMargin: "Обробка логістики (5%)", insurance: "Страхування вантажу (2%)", bank: "Банк/переказ (3%)", total: "РАЗОМ ДО СПЛАТИ", selectLog: "Оберіть доставку:", insNote: "✓ Страховка покриває 100% вартості вантажу"
+    cost: "РОЗРАХУНОК ВАРТОСТІ", goods: "Товар", broker: "Комісія IVYAR (12%)", logistics: "Логістика", logMargin: "Обробка логістики (5%)", insurance: "Страхування вантажу (2%)", bank: "Банк/переказ (3%)", total: "РАЗОМ ДО СПЛАТИ", selectLog: "Оберіть доставку:", insNote: "✓ Страховка покриває 100% вартості вантажу",
+    about: "Про нас", usaOffice: "Офіс США", uaOffice: "Представництво Україна", partner: "Партнерська мережа"
   },
   en: { 
     title: "AI PROCUREMENT ASSISTANT", subtitle: "IVYAR LLC", placeholder: "Describe what you need...", send: "➤", thinking: "Analyzing...", found: "Found", rec: "✓ RECOMMENDED", days: "days", urgQ: "Urgency?", crit: "🔴 Critical", urg: "🟠 Urgent", std: "🟡 Standard", plan: "🟢 Planned", created: "Order Created!", num: "Number", ai: "AI", ex: "Examples:", ex1: "Brakes, 20pcs", ex2: "Tires, 10pcs", ex3: "Filter, 5pcs", noRes: "Not found. Try: brakes, tires, filter, starter", welcome: "Hello! Describe what equipment you need.", note: "🔒 To confirm: Signal", home: "←", cancel: "✕ Cancel", restart: "🔄 New Search",
-    cost: "COST BREAKDOWN", goods: "Goods", broker: "IVYAR Fee (12%)", logistics: "Logistics", logMargin: "Logistics handling (5%)", insurance: "Cargo Insurance (2%)", bank: "Bank/transfer (3%)", total: "TOTAL DUE", selectLog: "Select delivery:", insNote: "✓ Insurance covers 100% cargo value"
+    cost: "COST BREAKDOWN", goods: "Goods", broker: "IVYAR Fee (12%)", logistics: "Logistics", logMargin: "Logistics handling (5%)", insurance: "Cargo Insurance (2%)", bank: "Bank/transfer (3%)", total: "TOTAL DUE", selectLog: "Select delivery:", insNote: "✓ Insurance covers 100% cargo value",
+    about: "About Us", usaOffice: "USA Office", uaOffice: "Ukraine Representative", partner: "Partner Network"
   }
 };
 
@@ -44,6 +51,7 @@ export default function Procurement() {
   const [showUrg, setShowUrg] = useState(false);
   const [currentOrder, setCurrentOrder] = useState(null);
   const [selectedLog, setSelectedLog] = useState(0);
+  const [showAbout, setShowAbout] = useState(false);
   const ref = useRef(null);
   const t = T[lang];
 
@@ -189,8 +197,62 @@ export default function Procurement() {
     );
   };
 
+  const AboutModal = () => (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '1rem' }}>
+      <div style={{ background: '#12121a', borderRadius: '12px', maxWidth: '400px', width: '100%', border: '1px solid #1e293b', overflow: 'hidden' }}>
+        <div style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', padding: '1rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '1.5rem', fontWeight: '800' }}>IVYAR LLC</div>
+          <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>{t.partner}</div>
+        </div>
+        
+        <div style={{ padding: '1rem' }}>
+          <div style={{ background: '#1e293b', borderRadius: '8px', padding: '0.75rem', marginBottom: '0.75rem', borderLeft: '3px solid #3b82f6' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '1.2rem' }}>🇺🇸</span>
+              <span style={{ color: '#3b82f6', fontSize: '0.7rem', fontWeight: '600' }}>{t.usaOffice}</span>
+            </div>
+            <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{lang === 'ua' ? TEAM.usa.name : TEAM.usa.nameEn}</div>
+            <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{lang === 'ua' ? TEAM.usa.role : TEAM.usa.roleEn}</div>
+            <div style={{ color: '#64748b', fontSize: '0.7rem', marginTop: '0.3rem' }}>📍 {TEAM.usa.location}</div>
+            <div style={{ marginTop: '0.5rem', padding: '0.4rem', background: '#0a0a0f', borderRadius: '4px', fontSize: '0.65rem', color: '#94a3b8' }}>
+              • Контракти з постачальниками США<br/>
+              • Закупівля обладнання<br/>
+              • Організація логістики<br/>
+              • Банк: Mercury (USA)
+            </div>
+          </div>
+
+          <div style={{ background: '#1e293b', borderRadius: '8px', padding: '0.75rem', borderLeft: '3px solid #ffd500' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '1.2rem' }}>🇺🇦</span>
+              <span style={{ color: '#ffd500', fontSize: '0.7rem', fontWeight: '600' }}>{t.uaOffice}</span>
+            </div>
+            <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{lang === 'ua' ? TEAM.ua.name : TEAM.ua.nameEn}</div>
+            <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{lang === 'ua' ? TEAM.ua.role : TEAM.ua.roleEn}</div>
+            <div style={{ color: '#64748b', fontSize: '0.7rem', marginTop: '0.3rem' }}>📍 {TEAM.ua.location}</div>
+            <div style={{ marginTop: '0.5rem', padding: '0.4rem', background: '#0a0a0f', borderRadius: '4px', fontSize: '0.65rem', color: '#94a3b8' }}>
+              • Комунікація з Міноборони<br/>
+              • Участь у зустрічах<br/>
+              • Підписання документів<br/>
+              • Координація з підрозділами
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', padding: '0.5rem', color: '#64748b', fontSize: '0.7rem' }}>
+            ↕️ Партнерська угода / Довіреність
+          </div>
+        </div>
+
+        <div style={{ padding: '0 1rem 1rem' }}>
+          <button onClick={() => setShowAbout(false)} style={{ width: '100%', background: '#3b82f6', color: '#fff', border: 'none', padding: '0.6rem', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>✕ {lang === 'ua' ? 'Закрити' : 'Close'}</button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0f', color: '#fff', fontFamily: 'system-ui', display: 'flex', flexDirection: 'column' }}>
+      {showAbout && <AboutModal />}
       <div style={{ height: '3px', background: 'linear-gradient(90deg, #005bbb 50%, #ffd500 50%)' }} />
       <header style={{ background: '#12121a', padding: '0.6rem 1rem', borderBottom: '1px solid #1e293b' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -199,7 +261,7 @@ export default function Procurement() {
             <div><div style={{ fontWeight: '700', fontSize: '0.9rem' }}>{t.title}</div><div style={{ color: '#64748b', fontSize: '0.65rem' }}>{t.subtitle}</div></div>
           </div>
           <div style={{ display: 'flex', gap: '4px' }}>
-            <a href="/" style={{ color: '#94a3b8', textDecoration: 'none', padding: '5px 8px', fontSize: '0.8rem' }}>{t.home}</a>
+            <button onClick={() => setShowAbout(true)} style={{ background: 'transparent', border: '1px solid #334155', color: '#94a3b8', padding: '5px 8px', borderRadius: '5px', cursor: 'pointer', fontSize: '0.7rem' }}>ℹ️</button>
             <button onClick={() => setLang(lang === 'ua' ? 'en' : 'ua')} style={{ background: '#f59e0b', color: '#000', border: 'none', padding: '5px 10px', borderRadius: '5px', cursor: 'pointer', fontWeight: '700', fontSize: '0.75rem' }}>{lang === 'ua' ? 'EN' : 'UA'}</button>
           </div>
         </div>
@@ -232,7 +294,14 @@ export default function Procurement() {
           </div>
         </div>
       </div>
-      <footer style={{ background: '#12121a', borderTop: '1px solid #1e293b', padding: '0.5rem', textAlign: 'center', color: '#64748b', fontSize: '0.65rem' }}>© 2025 IVYAR LLC 🇺🇦</footer>
+      <footer style={{ background: '#12121a', borderTop: '1px solid #1e293b', padding: '0.6rem', textAlign: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', fontSize: '0.65rem', color: '#64748b' }}>
+          <span>🇺🇸 IVYAR LLC, Seattle</span>
+          <span>|</span>
+          <span>🇺🇦 {lang === 'ua' ? 'Представництво Україна' : 'Ukraine Office'}</span>
+        </div>
+        <div style={{ fontSize: '0.6rem', color: '#475569', marginTop: '0.3rem' }}>© 2025 IVYAR LLC</div>
+      </footer>
     </div>
   );
 }
