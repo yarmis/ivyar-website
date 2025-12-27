@@ -52,6 +52,9 @@ export default function Procurement() {
   const [currentOrder, setCurrentOrder] = useState(null);
   const [selectedLog, setSelectedLog] = useState(0);
   const [showAbout, setShowAbout] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const fileInputRef = useRef(null);
+  const folderInputRef = useRef(null);
   const ref = useRef(null);
   const t = T[lang];
 
@@ -78,7 +81,17 @@ export default function Procurement() {
     return { goodsPrice, brokerFee, logCost, logMargin, insurance, bank, total, logName: log.name, logDays: log.days };
   };
 
-  const restart = () => { setMsgs([{ role: 'ai', text: t.welcome }]); setShowUrg(false); setCurrentOrder(null); setSelectedLog(0); setInput(''); };
+  const restart = () => { setMsgs([{ role: 'ai', text: t.welcome }]); setShowUrg(false); setCurrentOrder(null); setSelectedLog(0); setInput(''); setUploadedFiles([]); };
+  
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files || []);
+    setUploadedFiles(prev => [...prev, ...files]);
+    const fileNames = files.map(f => f.name).join(', ');
+    setMsgs(p => [...p, { role: 'ai', text: `📎 ${lang === 'ua' ? 'Завантажено файлів' : 'Files uploaded'}: ${files.length} (${fileNames})` }]);
+  };
+  
+  const openFileSelector = () => fileInputRef.current?.click();
+  const openFolderSelector = () => folderInputRef.current?.click();
   const cancelOrder = () => { setShowUrg(false); setCurrentOrder(null); setMsgs(p => [...p, { role: 'ai', text: lang === 'ua' ? '❌ Скасовано. Введіть новий запит.' : '❌ Cancelled. Enter new request.' }]); };
 
   const send = async () => {
@@ -288,6 +301,62 @@ export default function Procurement() {
           </div>
         )}
         <div style={{ padding: '0.6rem', borderTop: '1px solid #1e293b', background: '#12121a' }}>
+          <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.4rem' }}>
+            <input 
+              ref={fileInputRef}
+              type="file" 
+              multiple 
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
+            />
+            <input 
+              ref={folderInputRef}
+              type="file" 
+              webkitdirectory="true"
+              directory="true"
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
+            />
+            <button 
+              onClick={openFileSelector}
+              style={{ 
+                background: '#1e293b', 
+                color: '#94a3b8', 
+                border: '1px solid #334155', 
+                padding: '0.4rem 0.6rem', 
+                borderRadius: '6px', 
+                cursor: 'pointer', 
+                fontSize: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem'
+              }}
+            >
+              📎 {lang === 'ua' ? 'Файли' : 'Files'}
+            </button>
+            <button 
+              onClick={openFolderSelector}
+              style={{ 
+                background: '#1e293b', 
+                color: '#94a3b8', 
+                border: '1px solid #334155', 
+                padding: '0.4rem 0.6rem', 
+                borderRadius: '6px', 
+                cursor: 'pointer', 
+                fontSize: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem'
+              }}
+            >
+              📁 {lang === 'ua' ? 'Папка' : 'Folder'}
+            </button>
+            {uploadedFiles.length > 0 && (
+              <span style={{ fontSize: '0.7rem', color: '#22c55e', display: 'flex', alignItems: 'center', paddingLeft: '0.3rem' }}>
+                ✓ {uploadedFiles.length}
+              </span>
+            )}
+          </div>
           <div style={{ display: 'flex', gap: '0.4rem' }}>
             <input value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && send()} placeholder={t.placeholder} style={{ flex: 1, background: '#0a0a0f', border: '1px solid #334155', borderRadius: '8px', padding: '0.6rem 0.8rem', color: '#fff', fontSize: '0.9rem', outline: 'none' }} />
             <button onClick={send} disabled={typing || !input.trim()} style={{ background: typing || !input.trim() ? '#334155' : '#3b82f6', color: '#fff', border: 'none', padding: '0 1rem', borderRadius: '8px', cursor: typing || !input.trim() ? 'not-allowed' : 'pointer', fontWeight: '600', fontSize: '1rem' }}>{t.send}</button>
