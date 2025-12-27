@@ -81,7 +81,14 @@ export default function Procurement() {
     return { goodsPrice, brokerFee, logCost, logMargin, insurance, bank, total, logName: log.name, logDays: log.days };
   };
 
-  const restart = () => { setMsgs([{ role: 'ai', text: t.welcome }]); setShowUrg(false); setCurrentOrder(null); setSelectedLog(0); setInput(''); setUploadedFiles([]); };
+  const restart = () => { 
+    setMsgs([{ role: 'ai', text: t.welcome }]); 
+    setShowUrg(false); 
+    setCurrentOrder(null); 
+    setSelectedLog(0); 
+    setInput(''); 
+    setUploadedFiles([]); 
+  };
   
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files || []);
@@ -313,7 +320,6 @@ export default function Procurement() {
               ref={folderInputRef}
               type="file" 
               webkitdirectory="true"
-              directory="true"
               onChange={handleFileSelect}
               style={{ display: 'none' }}
             />
